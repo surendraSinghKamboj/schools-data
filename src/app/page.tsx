@@ -15,19 +15,23 @@ interface School {
   image_path: string;
 }
 
-const SchoolList: React.FC = async () => {
+const Page: React.FC = async () => {
   try {
     const result = await fetchAllSchools();
 
-    if (!result.success) {
-      throw new Error(result.error || "Failed to fetch schools");
+    if (!result || !result.success || !result.data) {
+      throw new Error(result?.error || "Failed to fetch schools");
     }
 
-    const schools: School[] = result.data;
+    const schools: School[] = result.data as School[];
 
     return (
       <div className="min-h-screen bg-gray-100 p-10">
-        <Link href={"/create"}><button className="bg-green-700 absolute top-20 left-16 text-white hover:bg-white hover:text-green-800 transition-all duration-1000 border-2 py-2 px-4 border-white hover:border-green-700 rounded-xl shadow-xl hover:shadow-green-500 shadow-gray-100">Add School</button></Link>
+        <Link href={"/create"}>
+          <button className="bg-green-700 absolute top-20 left-16 text-white hover:bg-white hover:text-green-800 transition-all duration-1000 border-2 py-2 px-4 border-white hover:border-green-700 rounded-xl shadow-xl hover:shadow-green-500 shadow-gray-100">
+            Add School
+          </button>
+        </Link>
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
           Schools List
         </h1>
@@ -67,15 +71,16 @@ const SchoolList: React.FC = async () => {
         </div>
       </div>
     );
-  } catch (error: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  } catch (error:any) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <p className="text-red-500 text-lg font-semibold">
-          Error: {error.message || "An unexpected error occurred"}
+          Error: An Internal Error Occurred.
         </p>
       </div>
     );
   }
 };
 
-export default SchoolList;
+export default Page;
